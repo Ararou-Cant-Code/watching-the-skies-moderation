@@ -1,0 +1,39 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Infractions {
+    id   Int             @id @default(autoincrement())
+    type InfractionTypes @default(Warn)
+
+    memberId    String
+    guildId     String
+    moderatorId String
+
+    reason String
+
+    issuedAt  DateTime  @default(now())
+    expiresAt DateTime?
+
+    updated Boolean @default(false)
+}
+
+model Blacklists {
+    guildId String
+    userId  String @id
+
+    reason String
+}
+
+enum InfractionTypes {
+    Ban
+    Mute
+    Warn
+    Unban
+    Unmute
+}
