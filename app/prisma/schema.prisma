@@ -21,6 +21,7 @@ model Infractions {
     expiresAt DateTime?
 
     updated Boolean @default(false)
+    invalid Boolean @default(false)
 }
 
 model Blacklists {

@@ -43,7 +43,7 @@ export default abstract class CaseCommand extends Command {
         name: ctx.message.guild!.name,
         iconURL: ctx.message.guild!.iconURL() || this.context.client.user!.displayAvatarURL(),
       })
-      .setTitle(`${infraction.type} \`(Case #${infraction.id})\``)
+      .setTitle(`${infraction.invalid ? "🔴 [INVALID] " : ""}${infraction.type} \`(Case #${infraction.id})\``)
       .setDescription("Case Details")
       .addFields([
         {

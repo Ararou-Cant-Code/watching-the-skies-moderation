@@ -9,7 +9,7 @@ export default abstract class MuteCommand extends Command {
     super(context, {
       name: "Mute",
       permissions: {
-        dev: true,
+        staff: true,
       },
       description: "Mutes someone for a provided reason and duration.",
     });

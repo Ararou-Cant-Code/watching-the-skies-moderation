@@ -8,7 +8,7 @@ export default abstract class WarnCommand extends Command {
     super(context, {
       name: "Warn",
       permissions: {
-        dev: true,
+        staff: true,
       },
       description: "Warns someone for a provided reason.",
     });

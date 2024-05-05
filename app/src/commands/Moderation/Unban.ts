@@ -8,7 +8,7 @@ export default abstract class UnbanCommand extends Command {
     super(context, {
       name: "Unban",
       permissions: {
-        dev: true,
+        staff: true,
       },
       description: "Unbans someone for a provided reason.",
     });

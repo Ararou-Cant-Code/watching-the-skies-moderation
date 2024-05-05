@@ -8,7 +8,7 @@ export default abstract class BlacklistCommand extends Command {
     super(context, {
       name: "Blacklist",
       permissions: {
-        dev: true,
+        admin: true,
       },
       description: "Blacklist a user from using commands.",
     });

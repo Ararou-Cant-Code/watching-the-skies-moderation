@@ -787,6 +787,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@wts/moderation@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@wts/moderation@workspace:."
+  dependencies:
+    "@prisma/client": "npm:5.12.0"
+    "@ptkdev/logger": "npm:^1.8.0"
+    "@sapphire/lexure": "npm:^1.1.7"
+    "@sapphire/time-utilities": "npm:^1.7.12"
+    "@sentry/node": "npm:^7.109.0"
+    "@sern/handler": "npm:^3.0.3"
+    "@types/node": "npm:^20.0.0"
+    canvacord: "npm:^6.0.0"
+    discord.js: "npm:latest"
+    dotenv: "npm:^16.3.1"
+    prisma: "npm:5.12.0"
+    ts-results-es: "npm:^4.1.0"
+    typescript: "npm:5.4"
+  languageName: unknown
+  linkType: soft
+
 "ansi-regex@npm:^5.0.1":
   version: 5.0.1
   resolution: "ansi-regex@npm:5.0.1"
@@ -1216,26 +1236,6 @@ __metadata:
   checksum: 10c0/026d42455aad66f0ab1ac8468dc75484a1df4ad7d8d62763a132afe009d087bb0730e57f628127c2f09dbfdc15e542d7fe9c7ca93e98202739621f8d251a8853
   languageName: node
   linkType: hard
-
-"storm-levels@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "storm-levels@workspace:."
-  dependencies:
-    "@prisma/client": "npm:5.12.0"
-    "@ptkdev/logger": "npm:^1.8.0"
-    "@sapphire/lexure": "npm:^1.1.7"
-    "@sapphire/time-utilities": "npm:^1.7.12"
-    "@sentry/node": "npm:^7.109.0"
-    "@sern/handler": "npm:^3.0.3"
-    "@types/node": "npm:^20.0.0"
-    canvacord: "npm:^6.0.0"
-    discord.js: "npm:latest"
-    dotenv: "npm:^16.3.1"
-    prisma: "npm:5.12.0"
-    ts-results-es: "npm:^4.1.0"
-    typescript: "npm:5.4"
-  languageName: unknown
-  linkType: soft
 
 "string.prototype.codepointat@npm:^0.2.1":
   version: 0.2.1

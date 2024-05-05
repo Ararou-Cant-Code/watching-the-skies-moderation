@@ -33,6 +33,13 @@ export class Client extends DiscordClient {
       },
       roles: {
         allStaff: "1235443027850432572",
+
+        staff: {
+          mod: ["1235443027850432572"],
+          hmod: ["1235443027850432572"],
+          admin: ["1235443027850432572"],
+          owner: ["1235443027850432572"],
+        },
       },
       permissions: {
         staff: {
@@ -40,7 +47,7 @@ export class Client extends DiscordClient {
           nodes: ["ping.command"],
         },
       },
-    },
+    }
   );
 
   public constructor(options: DiscordClientOptions & ClientOptions) {

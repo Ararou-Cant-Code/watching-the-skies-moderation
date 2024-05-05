@@ -1,4 +1,4 @@
-import { type Message } from "discord.js";
+import { type TextChannel, type Message } from "discord.js";
 import Command, { type CommandContext } from "./Command.js";
 import { getMember, getUser } from "../utils/functions.js";
 import { type ArgumentStream } from "@sapphire/lexure";
@@ -87,5 +87,14 @@ export default class Args {
     if (!user) throw new ArgumentError("Failed to fetch user.");
 
     return user;
+  };
+
+  public returnChannelFromIndex = async (index: number) => {
+    if (!this.commandArgs.length) throw new ArgumentError("The raw array is likely empty.");
+
+    const channel = await this.message.guild!.channels.fetch(this.commandArgs[index]).catch(() => null);
+    if (!channel) throw new ArgumentError("Failed to fetch channel.");
+
+    return channel as TextChannel;
   };
 }

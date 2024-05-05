@@ -8,7 +8,7 @@ export default abstract class BanCommand extends Command {
     super(context, {
       name: "Ban",
       permissions: {
-        dev: true,
+        staff: true,
       },
       description: "Bans someone for a provided reason.",
     });

@@ -10,10 +10,94 @@ import {
 import { Client } from "./Client.js";
 import { client } from "../../index.js";
 import { PrismaClient } from "@prisma/client";
-import { handleMessage } from "../utils/functions.js";
 import Args from "./Args.js";
 import { Lexer } from "@sapphire/lexure";
 import Context from "./Context.js";
+import Checks from "../classes/Checks.js";
+
+export default abstract class Command {
+  public checks: Checks;
+  public lexer: Lexer;
+  public context: CommandContext;
+
+  public directory?: string;
+
+  public options: CommandOptions;
+
+  public name: string;
+  public aliases?: string[];
+
+  public test = async (command: Command, context: CommandContext, ctx: Context, args?: Args) => {
+    const guildConfig = context.client.guildConfigs.get(context.executed!.guild.id);
+
+    if (
+      command.options.permissions &&
+      command.options.permissions.dev &&
+      context.executed!.user.id !== context.client.developerId
+    )
+      return "FAILED";
+
+    if (
+      command.options.permissions &&
+      command.options.permissions.staff &&
+      !this.checks.isStaff(ctx.member!, this.context.client.guildConfigs.get(ctx.message.guild!.id)!)
+    )
+      return "FAILED";
+
+    if (
+      command.options.permissions &&
+      command.options.permissions.hmod &&
+      !this.checks.isStaff(ctx.member!, this.context.client.guildConfigs.get(ctx.message.guild!.id)!)
+    )
+      return "FAILED";
+
+    if (
+      command.options.permissions &&
+      command.options.permissions.trusted_member &&
+      !context.executed!.userRoles!.includes(guildConfig!.roles.level_roles[20]) &&
+      !this.checks.isStaff(ctx.member!, this.context.client.guildConfigs.get(ctx.message.guild!.id)!)
+    )
+      return "FAILED";
+
+    if (
+      command.options.permissions &&
+      command.options.permissions.commands_channel &&
+      context.executed!.channel.id !== guildConfig!.channels.commands &&
+      !this.checks.isStaff(ctx.member!, this.context.client.guildConfigs.get(ctx.message.guild!.id)!)
+    )
+      return ctx.reply("This command goes in a bot-commands channel, not here.");
+
+    return this.run(ctx, args);
+  };
+
+  public abstract run: (...args: any[]) => unknown;
+
+  public constructor(context: CommandContext, options: CommandOptions) {
+    this.context = context ?? { client };
+    this.options = options;
+    this.name = options.name;
+    this.aliases = options.aliases;
+
+    this.checks = new Checks();
+    this.lexer = new Lexer({
+      quotes: [
+        ['"', '"'],
+        ["“", "”"],
+        ["「", "」"],
+        ["«", "»"],
+      ],
+    });
+  }
+
+  public toJSON(): any {
+    return {
+      name: this.name,
+      description: this.options.description,
+      detailedDescription: this.options.detailedDescription,
+      directory: this.context.directory,
+    };
+  }
+}
 
 interface CommandOptions {
   slashCapable?: boolean | false;
@@ -48,86 +132,4 @@ export interface CommandContext {
     guild: Guild;
     channel: Channel;
   };
-}
-
-export default abstract class Command {
-  public lexer: Lexer;
-  public context: CommandContext;
-
-  public directory?: string;
-
-  public options: CommandOptions;
-
-  public name: string;
-  public aliases?: string[];
-
-  public test = async (command: Command, context: CommandContext, ctx: Context, args?: Args) => {
-    const guildConfig = context.client.guildConfigs.get(context.executed!.guild.id);
-
-    if (
-      command.options.permissions &&
-      command.options.permissions.dev &&
-      context.executed!.user.id !== context.client.developerId
-    )
-      return "FAILED";
-
-    if (
-      command.options.permissions &&
-      command.options.permissions.staff &&
-      !context.executed!.userRoles!.includes(guildConfig!.roles.allStaff)
-    )
-      return "FAILED";
-
-    if (
-      command.options.permissions &&
-      command.options.permissions.hmod &&
-      !context.executed!.userRoles!.includes(guildConfig!.roles.allStaff)
-    )
-      return "FAILED";
-
-    if (
-      command.options.permissions &&
-      command.options.permissions.trusted_member &&
-      !context.executed!.userRoles!.includes(guildConfig!.roles.level_roles[20]) &&
-      !context.executed!.userRoles!.includes(guildConfig!.roles.allStaff)
-    )
-      return "FAILED";
-
-    if (
-      command.options.permissions &&
-      command.options.permissions.commands_channel &&
-      context.executed!.channel.id !== guildConfig!.channels.commands &&
-      !context.executed!.userRoles!.includes(guildConfig!.roles.allStaff)
-    )
-      return ctx.reply("go to bot commands pls thanks");
-
-    return this.run(ctx, args);
-  };
-
-  public abstract run: (...args: any[]) => unknown;
-
-  public constructor(context: CommandContext, options: CommandOptions) {
-    this.context = context ?? { client };
-    this.options = options;
-    this.name = options.name;
-    this.aliases = options.aliases;
-
-    this.lexer = new Lexer({
-      quotes: [
-        ['"', '"'],
-        ["“", "”"],
-        ["「", "」"],
-        ["«", "»"],
-      ],
-    });
-  }
-
-  public toJSON(): any {
-    return {
-      name: this.name,
-      description: this.options.description,
-      detailedDescription: this.options.detailedDescription,
-      directory: this.context.directory,
-    };
-  }
 }

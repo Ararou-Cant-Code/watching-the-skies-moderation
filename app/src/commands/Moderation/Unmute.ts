@@ -8,7 +8,7 @@ export default abstract class UnmuteCommand extends Command {
     super(context, {
       name: "Unmute",
       permissions: {
-        dev: true,
+        staff: true,
       },
       description: "Unmutes someone for a provided reason and duration.",
     });

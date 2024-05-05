@@ -2,14 +2,14 @@ import Command, { CommandContext } from "../../lib/structures/Command.js";
 import Args from "../../lib/structures/Args.js";
 import Context from "../../lib/structures/Context.js";
 
-export default abstract class RmpunishCommand extends Command {
+export default abstract class InvalidatecaseCommand extends Command {
   public constructor(context: CommandContext) {
     super(context, {
-      name: "Rmpunish",
+      name: "Invalidatecase",
       permissions: {
-        hmod: true,
+        staff: true,
       },
-      description: "Removes a punishment.",
+      description: "Invalidates a punishment.",
     });
   }
 
@@ -25,14 +25,24 @@ export default abstract class RmpunishCommand extends Command {
     });
     if (!infraction) return ctx.reply("That is not a valid infraction.");
 
-    await this.context.client.db.infractions.delete({
+    if (
+      !this.checks.isHmod(ctx.member!, this.context.client.guildConfigs.get(ctx.message.guild!.id)!) &&
+      infraction.moderatorId !== ctx.author.id
+    )
+      return ctx.reply("You cannot modify a punishment that was not issued by you.");
+
+    await this.context.client.db.infractions.update({
       where: {
         guildId: ctx.message.guild!.id,
         id,
       },
+      data: {
+        invalid: true,
+        expiresAt: null,
+      },
     });
     return ctx.message.channel.send(
-      `**${infraction.type}** \`(#${infraction.id})\` issued to <@${infraction.memberId}> issued by <@${infraction.moderatorId}> has been removed.`,
+      `**${infraction.type}** \`(#${infraction.id})\` issued to <@${infraction.memberId}> issued by <@${infraction.moderatorId}> has been invalidated.`
     );
   };
 }
