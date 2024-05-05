@@ -1,7 +1,10 @@
 {
-  "name": "storm-levels",
+  "name": "@wts/moderation",
   "version": "1.0.0",
-  "description": "A simple level bot.",
+  "description": "Moderation bot built for Watching The Skies.",
+  "contributors": [
+    "Ararou-Cant-Code (ararou1@proton.me)"
+  ],
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
@@ -10,7 +13,7 @@
   },
   "keywords": [
     "typescript",
-    "level-bot",
+    "moderation-bot",
     "discord.js"
   ],
   "license": "MIT",
