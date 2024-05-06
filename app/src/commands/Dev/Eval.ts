@@ -27,7 +27,7 @@ export default abstract class EvalCommand extends Command {
       const result = inspect(evaluated);
 
       if (result.length >= 2000)
-        await ctx.reply({
+        return ctx.reply({
           content: "Whoops! Evaluated result is too long for discord...",
           files: [{ name: "result.js", attachment: Buffer.from(result) }],
         });

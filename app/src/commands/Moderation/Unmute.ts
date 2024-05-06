@@ -7,6 +7,7 @@ export default abstract class UnmuteCommand extends Command {
   public constructor(context: CommandContext) {
     super(context, {
       name: "Unmute",
+      aliases: ["um", "unm"],
       permissions: {
         staff: true,
       },

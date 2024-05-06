@@ -1,21 +1,48 @@
 import { EmbedBuilder, Message, type EmbedField, type Guild } from "discord.js";
 import { type CommandContext } from "../structures/Command.js";
 import { Client } from "../structures/Client.js";
+import type { RawGuildStore } from "./constants.js";
 
 export const handleMessage = async (message: Message, context: CommandContext, content: string) => {
-  if (context.client.commandResponseCooldowns.has(message.author.id)) return;
+  if (
+    (context.client.stores.get("guilds")!.get(message.guild!.id)! as RawGuildStore).cooldowns!.messages!.has(
+      message.author.id,
+    )
+  )
+    return;
 
   await message.reply(content);
 
-  context.client.commandResponseCooldowns.add(message.author.id);
-  setTimeout(() => context.client.commandResponseCooldowns.delete(message.author.id), 15000);
+  (context.client.stores.get("guilds")!.get(message.guild!.id)! as RawGuildStore).cooldowns!.messages!.add(
+    message.author.id,
+  );
+  setTimeout(
+    () =>
+      (context.client.stores.get("guilds")!.get(message.guild!.id)! as RawGuildStore).cooldowns!.messages!.delete(
+        message.author.id,
+      ),
+    15000,
+  );
 };
 
 export const handleCommandCooldowns = async (message: Message, context: CommandContext) => {
-  if (context.client.commandCooldowns.has(message.author.id)) return;
+  if (
+    (context.client.stores.get("guilds")!.get(message.guild!.id)! as RawGuildStore).cooldowns!.commands!.has(
+      message.author.id,
+    )
+  )
+    return;
 
-  context.client.commandCooldowns.add(message.author.id);
-  setTimeout(() => context.client.commandCooldowns.delete(message.author.id), 15000);
+  (context.client.stores.get("guilds")!.get(message.guild!.id)! as RawGuildStore).cooldowns!.messages!.add(
+    message.author.id,
+  );
+  setTimeout(
+    () =>
+      (context.client.stores.get("guilds")!.get(message.guild!.id)! as RawGuildStore).cooldowns!.messages!.delete(
+        message.author.id,
+      ),
+    15000,
+  );
 };
 
 export function getXp(min: number, max: number) {

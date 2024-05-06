@@ -8,6 +8,7 @@ export default abstract class MuteCommand extends Command {
   public constructor(context: CommandContext) {
     super(context, {
       name: "Mute",
+      aliases: ["m", "shut"],
       permissions: {
         staff: true,
       },

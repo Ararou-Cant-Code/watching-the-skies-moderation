@@ -7,6 +7,7 @@ export default abstract class UnbanCommand extends Command {
   public constructor(context: CommandContext) {
     super(context, {
       name: "Unban",
+      aliases: ["ub", "unb"],
       permissions: {
         staff: true,
       },

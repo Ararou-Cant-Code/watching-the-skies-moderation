@@ -7,6 +7,7 @@ export default abstract class WarnCommand extends Command {
   public constructor(context: CommandContext) {
     super(context, {
       name: "Warn",
+      aliases: ["w"],
       flags: ["silent", "s", "permanent", "perm", "p"],
       permissions: {
         staff: true,

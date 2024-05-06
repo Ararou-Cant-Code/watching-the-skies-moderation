@@ -4,6 +4,7 @@ import Listener from "../lib/structures/Listener.js";
 import Args from "../lib/structures/Args.js";
 import { Parser, PrefixedStrategy, ArgumentStream } from "@sapphire/lexure";
 import Context from "../lib/structures/Context.js";
+import type { Command } from "../lib/structures/Command.js";
 
 const parser = new Parser(new PrefixedStrategy(["--", "-", "—"], ["=", ":"]));
 const escapeRegex = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -39,7 +40,10 @@ export default abstract class MessageCommandsListener extends Listener {
 
     const command = rawArgs.shift()!.toLowerCase();
 
-    const cmd = this.client.commands.get(command) || this.client.commands.get(this.client.aliases.get(command)!);
+    const cmd =
+      (this.client.stores.get("commands")!.get(command) as Command) ||
+      this.client.stores.get("commands")!.get(this.client.stores.get("aliases")!.get(command)! as string);
+
     if (!cmd) return;
 
     cmd.context.executed = {

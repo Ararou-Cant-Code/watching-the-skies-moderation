@@ -1,5 +1,5 @@
 import { Collection, Client as DiscordClient, type ClientOptions as DiscordClientOptions } from "discord.js";
-import { ClientOptions, type GuildConfigOptions } from "../utils/constants.js";
+import { ClientOptions, type ClientStoresTypes } from "../utils/constants.js";
 import { readdirSync } from "node:fs";
 import Logger from "@ptkdev/logger";
 import Listener from "./Listener.js";
@@ -7,6 +7,13 @@ import { type Command } from "./Command.js";
 import Sentry from "@sentry/node";
 import { PrismaClient } from "@prisma/client";
 import SentryHandler from "../classes/SentryHandler.js";
+
+const listenersCollection: Collection<string, Listener> = new Collection();
+
+const commandsCollection: Collection<string, Command> = new Collection();
+const aliasesCollection: Collection<string, string> = new Collection();
+
+const slashCommandsCollection: Collection<string, Command> = new Collection();
 
 export class Client extends DiscordClient {
   public sentryHandler = new SentryHandler({ client: this }, { sendEmbed: true, sendLogToConsole: true });
@@ -16,39 +23,7 @@ export class Client extends DiscordClient {
   public developerId?: string = "840213882147831879";
   public defaultPrefix?: string = "wts!";
 
-  public commandResponseCooldowns = new Set();
-  public commandCooldowns = new Set();
-  public levelCooldowns = new Set();
-
-  public commands: Collection<string, Command> = new Collection();
-  public aliases: Map<string, string> = new Map();
-
-  public slashCommands: Collection<string, Command> = new Collection();
-
-  public guildConfigs: Map<string, GuildConfigOptions> = new Map().set(
-    "1235442068189347840", // WTS Moderation Testing
-    {
-      channels: {
-        commands: "1235443728349663263",
-      },
-      roles: {
-        allStaff: "1235443027850432572",
-
-        staff: {
-          mod: ["1235443027850432572"],
-          hmod: ["1235443027850432572"],
-          admin: ["1235443027850432572"],
-          owner: ["1235443027850432572"],
-        },
-      },
-      permissions: {
-        staff: {
-          roles: [""],
-          nodes: ["ping.command"],
-        },
-      },
-    },
-  );
+  public stores: Collection<string, ClientStoresTypes> = new Collection();
 
   public constructor(options: DiscordClientOptions & ClientOptions) {
     super(options);
@@ -86,11 +61,16 @@ export class Client extends DiscordClient {
           directory: dir,
         };
 
-        this.commands.set(command.name.toLowerCase(), command);
-        this.slashCommands.set(command.name.toLowerCase(), command);
+        commandsCollection.set(command.name.toLowerCase(), command);
+        this.stores.set("commands", commandsCollection);
+
+        slashCommandsCollection.set(command.name.toLowerCase(), command);
+        this.stores.set("slash-commands", slashCommandsCollection);
 
         if (command.aliases)
-          command.aliases.forEach((alias) => this.aliases.set(alias.toLowerCase(), command.name.toLowerCase()));
+          command.aliases.forEach((alias) => aliasesCollection.set(alias.toLowerCase(), command.name.toLowerCase()));
+
+        this.stores.set("aliases", aliasesCollection);
       }
     }
   };
@@ -102,6 +82,9 @@ export class Client extends DiscordClient {
       const importedListener = (await import(`../../core-listeners/${file}`)).default;
 
       const listener: Listener = new importedListener(this);
+
+      listenersCollection.set(listener.name, listener);
+      this.stores.set("listeners", listenersCollection);
 
       listener.once
         ? this.once(listener.options.event, (...args) => void listener.run!(...args))
@@ -116,6 +99,9 @@ export class Client extends DiscordClient {
       const importedListener = (await import(`../../listeners/${file}`)).default;
 
       const listener: Listener = new importedListener(this);
+
+      listenersCollection.set(listener.name, listener);
+      this.stores.set("listeners", listenersCollection);
 
       listener.once
         ? this.once(listener.options.event, (...args) => void listener.run!(...args))

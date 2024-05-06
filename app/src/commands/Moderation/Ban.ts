@@ -7,6 +7,7 @@ export default abstract class BanCommand extends Command {
   public constructor(context: CommandContext) {
     super(context, {
       name: "Ban",
+      aliases: ["b", "out", "getout", "gt", "gtfo"],
       permissions: {
         staff: true,
       },

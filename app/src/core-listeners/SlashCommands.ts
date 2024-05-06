@@ -2,6 +2,7 @@ import { type BaseInteraction, type ChatInputCommandInteraction, Events, type Me
 import { Client } from "../lib/structures/Client.js";
 import Listener from "../lib/structures/Listener.js";
 import Context from "../lib/structures/Context.js";
+import type { Command } from "../lib/structures/Command.js";
 
 const getCtx = function (wrappable: Message | BaseInteraction) {
   const ctx = Context.wrap(wrappable);
@@ -28,7 +29,7 @@ export default abstract class ClientReadyListener extends Listener {
     if (blacklistedData) return;
 
     // Get the command class from the slashCommands collection
-    const command = this.client.slashCommands.get(interaction.commandName);
+    const command = this.client.stores.get("slashCommands")!.get(interaction.commandName) as Command;
 
     // Set the command context.
     command!.context.executed = {

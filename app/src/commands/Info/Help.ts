@@ -1,4 +1,4 @@
-import { type APIEmbedField, EmbedBuilder } from "discord.js";
+import { type APIEmbedField, EmbedBuilder, Collection } from "discord.js";
 import { Command, type CommandContext } from "../../lib/structures/Command.js";
 import type Args from "../../lib/structures/Args.js";
 import type Context from "../../lib/structures/Context.js";
@@ -21,7 +21,7 @@ export default abstract class HelpCommand extends Command {
     const cmdDetails = new EmbedBuilder();
     const embedFields: APIEmbedField[] = [];
     const categories: string[] = [];
-    const commands = this.context.client.commands.map((c) => c);
+    const commands = (this.context.client.stores.get("commands")! as Collection<string, Command>).map((c) => c);
 
     for (var c = 0; c < commands.length; c++) {
       if (categories.includes(commands[c].context.directory!)) continue;
@@ -52,8 +52,10 @@ export default abstract class HelpCommand extends Command {
       });
 
     const command =
-      this.context.client.commands.get(rawCommandArg) ||
-      this.context.client.commands.get(this.context.client.aliases.get(rawCommandArg)!);
+      (this.context.client.stores.get("commands")!.get(rawCommandArg) as Command) ||
+      this.context.client.stores
+        .get("commands")!
+        .get(this.context.client.stores.get("aliases")!.get(rawCommandArg)! as string);
     if (!command)
       return ctx.reply({
         embeds: [

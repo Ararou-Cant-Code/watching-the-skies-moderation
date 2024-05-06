@@ -1,4 +1,13 @@
-import { type ClientOptions as DiscordClientOptions, GatewayIntentBits, Partials } from "discord.js";
+import {
+  type ClientOptions as DiscordClientOptions,
+  GatewayIntentBits,
+  Partials,
+  Collection,
+  Guild,
+  OAuth2Guild,
+} from "discord.js";
+import type { Command } from "../structures/Command.js";
+import type Listener from "../structures/Listener.js";
 
 export const ClientOptions: ClientOptions = {
   intents: [
@@ -20,12 +29,35 @@ export interface ClientOptions extends DiscordClientOptions {
   developer?: string | string[] | null;
 }
 
-export interface GuildConfigOptions {
-  permissions: {
-    staff: { roles: string[]; nodes: string[]; users: string[] };
+export interface GuildCooldowns {
+  commands?: Set<string>;
+  messages?: Set<string>;
+  errorMessages?: Set<string>;
+}
+
+export interface RawGuildStore {
+  guild: Guild | OAuth2Guild;
+  config?: GuildConfigOptions;
+  cooldowns?: {
+    commands?: Set<string>;
+    messages?: Set<string>;
+    errorMessages?: Set<string>;
   };
-  channels: { commands: string; prohibited: string[] };
-  roles: { level_roles: LevelRoles; prohibited: string[]; allStaff: string; staff: StaffRoles };
+}
+
+export type ClientStoresTypes =
+  | Collection<string, Command>
+  | Collection<string, Listener>
+  | Collection<string, string>
+  | Collection<string, string[]>
+  | Collection<string, RawGuildStore>;
+
+export interface GuildConfigOptions {
+  permissions?: {
+    staff?: { roles: string[]; nodes: string[]; users?: string[] };
+  };
+  channels?: { commands: string; prohibited?: string[] };
+  roles?: { level_roles?: LevelRoles; prohibited?: string[]; allStaff?: string; staff?: StaffRoles };
 }
 
 interface StaffRoles {
