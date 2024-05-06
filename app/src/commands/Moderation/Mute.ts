@@ -1,6 +1,6 @@
-import Command, { CommandContext } from "../../lib/structures/Command.js";
-import Args from "../../lib/structures/Args.js";
-import Context from "../../lib/structures/Context.js";
+import { Command, type CommandContext } from "../../lib/structures/Command.js";
+import type Args from "../../lib/structures/Args.js";
+import type Context from "../../lib/structures/Context.js";
 import { Duration, Time } from "@sapphire/time-utilities";
 import { MuteInfraction } from "../../lib/infractions/Mute.js";
 

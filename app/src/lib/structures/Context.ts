@@ -44,13 +44,13 @@ abstract class CoreContext<M, I> {
     return !this.isMessage();
   }
 
-  static wrap(_: unknown): unknown {
+  public static wrap(_: unknown): unknown {
     throw new Error("You need to override this method; cannot wrap an abstract class");
   }
 }
 
 export default class Context extends CoreContext<Message, ChatInputCommandInteraction> {
-  protected constructor(protected ctx: Result<Message, ChatInputCommandInteraction>) {
+  protected constructor(protected override ctx: Result<Message, ChatInputCommandInteraction>) {
     super(ctx);
   }
 
@@ -58,7 +58,15 @@ export default class Context extends CoreContext<Message, ChatInputCommandIntera
     return this.interaction.options;
   }
 
-  static override wrap(wrappable: BaseInteraction | Message): Context {
+  public async reply(data: any) {
+    return safeUnwrap(
+      this.ctx
+        .map((m) => m.reply(data as MessageReplyOptions))
+        .mapErr((i) => i.reply(data as InteractionReplyOptions).then(() => i.fetchReply())),
+    );
+  }
+
+  public static override wrap(wrappable: BaseInteraction | Message): Context {
     if ("interaction" in wrappable) {
       return new Context(Ok(wrappable));
     }
@@ -88,13 +96,5 @@ export default class Context extends CoreContext<Message, ChatInputCommandIntera
 
   public get editedTimestamp(): number {
     return safeUnwrap(this.ctx.map((m) => m.editedTimestamp!).mapErr((i) => i.createdTimestamp));
-  }
-
-  public async reply(data: any) {
-    return safeUnwrap(
-      this.ctx
-        .map((m) => m.reply(data as MessageReplyOptions))
-        .mapErr((i) => i.reply(data as InteractionReplyOptions).then(() => i.fetchReply())),
-    );
   }
 }

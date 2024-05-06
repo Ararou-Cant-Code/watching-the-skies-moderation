@@ -1,16 +1,12 @@
 {
-    "compilerOptions": {
-      "moduleResolution": "node",
-      "resolveJsonModule": true,
-      "target": "ESNext",
-      "module": "ESNext",
-      "outDir": "dist",
-      "rootDir": "src",
-      "strict": true,
-      "esModuleInterop": true,
-      "noImplicitAny": true,
-      "strictNullChecks": true,
-      "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true
-    }
+  "extends": ["./ts-configs/base.json", "./ts-configs/verbatim.json", "./ts-configs/extra-strict.json"],
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["ESNext"],
+    "rootDir": "src",
+    "outDir": "dist",
+    "noImplicitReturns": false,
+    "experimentalDecorators": true,
+    "skipLibCheck": true
   }
+}

@@ -1,9 +1,9 @@
-import { Collection, Client as DiscordClient, ClientOptions as DiscordClientOptions, REST, Routes } from "discord.js";
-import { ClientOptions, GuildConfigOptions } from "../utils/constants.js";
+import { Collection, Client as DiscordClient, type ClientOptions as DiscordClientOptions } from "discord.js";
+import { ClientOptions, type GuildConfigOptions } from "../utils/constants.js";
 import { readdirSync } from "node:fs";
 import Logger from "@ptkdev/logger";
 import Listener from "./Listener.js";
-import Command from "./Command.js";
+import { type Command } from "./Command.js";
 import Sentry from "@sentry/node";
 import { PrismaClient } from "@prisma/client";
 import SentryHandler from "../classes/SentryHandler.js";
@@ -20,10 +20,10 @@ export class Client extends DiscordClient {
   public commandCooldowns = new Set();
   public levelCooldowns = new Set();
 
-  public commands: Collection<String, Command> = new Collection();
+  public commands: Collection<string, Command> = new Collection();
   public aliases: Map<string, string> = new Map();
 
-  public slashCommands: Collection<String, Command> = new Collection();
+  public slashCommands: Collection<string, Command> = new Collection();
 
   public guildConfigs: Map<string, GuildConfigOptions> = new Map().set(
     "1235442068189347840", // WTS Moderation Testing
@@ -47,12 +47,27 @@ export class Client extends DiscordClient {
           nodes: ["ping.command"],
         },
       },
-    }
+    },
   );
 
   public constructor(options: DiscordClientOptions & ClientOptions) {
     super(options);
   }
+
+  public start = async (token: string) => {
+    await this.handleCoreListeners();
+    await this.handleListeners();
+    await this.handleCommands();
+    // await this.handleSlashCommands(token);
+
+    Sentry.init({
+      dsn: process.env.SENTRY_DSN!,
+    });
+
+    await this.login(token).catch((e) => {
+      throw new Error("Failed to start client: " + e);
+    });
+  };
 
   private handleCommands = async () => {
     const cmdPath = readdirSync("dist/commands");
@@ -106,20 +121,5 @@ export class Client extends DiscordClient {
         ? this.once(listener.options.event, (...args) => void listener.run!(...args))
         : this.on(listener.options.event, (...args) => void listener.run!(...args));
     }
-  };
-
-  public start = async (token: string) => {
-    await this.handleCoreListeners();
-    await this.handleListeners();
-    await this.handleCommands();
-    // await this.handleSlashCommands(token);
-
-    Sentry.init({
-      dsn: process.env.SENTRY_DSN!,
-    });
-
-    await this.login(token).catch((e) => {
-      throw new Error("Failed to start client: " + e);
-    });
   };
 }

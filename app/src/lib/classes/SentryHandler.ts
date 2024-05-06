@@ -1,6 +1,6 @@
 import { type APIEmbed, Colors as Colours, type Message, time, codeBlock, WebhookClient } from "discord.js";
 import { type Client } from "../structures/Client.js";
-import Command, { type CommandContext } from "../structures/Command";
+import { type Command, type CommandContext } from "../structures/Command.js";
 import { captureException } from "@sentry/node";
 
 export default class SentryHandler {

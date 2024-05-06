@@ -1,8 +1,8 @@
-import { Message, codeBlock } from "discord.js";
-import Command, { CommandContext } from "../../lib/structures/Command.js";
+import { codeBlock } from "discord.js";
+import { Command, type CommandContext } from "../../lib/structures/Command.js";
+import type Args from "../../lib/structures/Args.js";
+import type Context from "../../lib/structures/Context.js";
 import { inspect } from "node:util";
-import Args from "../../lib/structures/Args.js";
-import Context from "../../lib/structures/Context.js";
 
 export default abstract class EvalCommand extends Command {
   public constructor(context: CommandContext) {
@@ -27,7 +27,7 @@ export default abstract class EvalCommand extends Command {
       const result = inspect(evaluated);
 
       if (result.length >= 2000)
-        ctx.reply({
+        await ctx.reply({
           content: "Whoops! Evaluated result is too long for discord...",
           files: [{ name: "result.js", attachment: Buffer.from(result) }],
         });

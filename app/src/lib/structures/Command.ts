@@ -4,8 +4,8 @@ import {
   type PermissionsBitField,
   type User,
   type Channel,
-  ChatInputCommandInteraction,
-  SlashCommandBuilder,
+  type ChatInputCommandInteraction,
+  type SlashCommandBuilder,
 } from "discord.js";
 import { Client } from "./Client.js";
 import { client } from "../../index.js";
@@ -15,7 +15,7 @@ import { Lexer } from "@sapphire/lexure";
 import Context from "./Context.js";
 import Checks from "../classes/Checks.js";
 
-export default abstract class Command {
+export abstract class Command {
   public checks: Checks;
   public lexer: Lexer;
   public context: CommandContext;
@@ -26,6 +26,23 @@ export default abstract class Command {
 
   public name: string;
   public aliases?: string[];
+
+  public constructor(context: CommandContext, options: CommandOptions) {
+    this.context = context ?? { client };
+    this.options = options;
+    this.name = options.name;
+    this.aliases = options.aliases;
+
+    this.checks = new Checks();
+    this.lexer = new Lexer({
+      quotes: [
+        ['"', '"'],
+        ["“", "”"],
+        ["「", "」"],
+        ["«", "»"],
+      ],
+    });
+  }
 
   public test = async (command: Command, context: CommandContext, ctx: Context, args?: Args) => {
     const guildConfig = context.client.guildConfigs.get(context.executed!.guild.id);
@@ -72,23 +89,6 @@ export default abstract class Command {
 
   public abstract run: (...args: any[]) => unknown;
 
-  public constructor(context: CommandContext, options: CommandOptions) {
-    this.context = context ?? { client };
-    this.options = options;
-    this.name = options.name;
-    this.aliases = options.aliases;
-
-    this.checks = new Checks();
-    this.lexer = new Lexer({
-      quotes: [
-        ['"', '"'],
-        ["“", "”"],
-        ["「", "」"],
-        ["«", "»"],
-      ],
-    });
-  }
-
   public toJSON(): any {
     return {
       name: this.name,
@@ -97,6 +97,10 @@ export default abstract class Command {
       directory: this.context.directory,
     };
   }
+}
+
+export namespace Command {
+  export type Context = CommandContext;
 }
 
 interface CommandOptions {

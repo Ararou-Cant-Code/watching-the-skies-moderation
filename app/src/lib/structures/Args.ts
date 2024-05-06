@@ -1,11 +1,11 @@
 import { type TextChannel, type Message } from "discord.js";
-import Command, { type CommandContext } from "./Command.js";
+import { type Command, type CommandContext } from "./Command.js";
 import { getMember, getUser } from "../utils/functions.js";
 import { type ArgumentStream } from "@sapphire/lexure";
 
 class ArgumentError extends Error {
-  public name: string = "ArgumentError";
-  public message: string;
+  public override name: string = "ArgumentError";
+  public override message: string;
 
   public constructor(message: string) {
     super(message);
@@ -19,9 +19,9 @@ export default class Args {
   public readonly commandContext: CommandContext;
   public readonly commandArgs: string[];
 
-  protected readonly parser: ArgumentStream;
-
   public readonly message: Message;
+
+  protected readonly parser: ArgumentStream;
 
   public constructor(
     command: Command,

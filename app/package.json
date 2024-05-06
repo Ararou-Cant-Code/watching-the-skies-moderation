@@ -9,7 +9,22 @@
   "scripts": {
     "build": "tsc",
     "prettier": "npx prettier --write \"./src/**/*.ts\"",
-    "start": "tsc && node ./dist/index.js"
+    "start": "tsc && node ./dist/index.js",
+    "lint": "eslint \"./src/**/*.ts\"",
+    "fix": "eslint --fix \"./src/**/*.ts\""
+  },
+  "eslintConfig": {
+    "extends": "@sapphire/eslint-config",
+    "rules": {
+      "no-eval": "off",
+      "no-var": "off",
+      "no-negated-condition": "off",
+      "prefer-template": "off",
+      "@typescript-eslint/require-await": "off",
+      "@typescript-eslint/prefer-for-of": "off",
+      "@typescript-eslint/no-throw-literal": "off",
+      "@typescript-eslint/no-base-to-string": "off"
+    }
   },
   "keywords": [
     "typescript",
@@ -20,13 +35,17 @@
   "dependencies": {
     "@prisma/client": "5.12.0",
     "@ptkdev/logger": "^1.8.0",
+    "@sapphire/eslint-config": "^5.0.4",
     "@sapphire/lexure": "^1.1.7",
     "@sapphire/time-utilities": "^1.7.12",
     "@sentry/node": "^7.109.0",
     "@sern/handler": "^3.0.3",
+    "@typescript-eslint/eslint-plugin": "^7.8.0",
     "canvacord": "^6.0.0",
     "discord.js": "latest",
     "dotenv": "^16.3.1",
+    "eslint": "^8.47.0",
+    "eslint-plugin-prettier": "^5.0.0",
     "ts-results-es": "^4.1.0"
   },
   "devDependencies": {

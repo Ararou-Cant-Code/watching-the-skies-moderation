@@ -1,7 +1,7 @@
-import { APIEmbedField, EmbedBuilder } from "discord.js";
-import Command, { CommandContext } from "../../lib/structures/Command.js";
-import Args from "../../lib/structures/Args.js";
-import Context from "../../lib/structures/Context.js";
+import { type APIEmbedField, EmbedBuilder } from "discord.js";
+import { Command, type CommandContext } from "../../lib/structures/Command.js";
+import type Args from "../../lib/structures/Args.js";
+import type Context from "../../lib/structures/Context.js";
 
 export default abstract class HelpCommand extends Command {
   public constructor(context: CommandContext) {
@@ -37,7 +37,7 @@ export default abstract class HelpCommand extends Command {
           .map((cmd) => `\`${cmd.name}\``)
           .join(", "),
         inline: false,
-      })
+      }),
     );
 
     const rawCommandArg = await args.getIndex(0).catch(() => null);
@@ -71,7 +71,7 @@ export default abstract class HelpCommand extends Command {
     cmdDetails.setTitle(
       `${this.context.client.defaultPrefix}${command.name}${
         command.options.detailedDescription?.usage ? ` ${command.options.detailedDescription.usage}` : ""
-      }`
+      }`,
     );
     if (
       command.options.description ||
@@ -86,7 +86,7 @@ export default abstract class HelpCommand extends Command {
           command.options.detailedDescription && command.options.detailedDescription.examples
             ? `**Example(s)** ${command.options.detailedDescription.examples.join("\n")}`
             : ""
-        }`
+        }`,
       );
 
     return ctx.reply({ embeds: [cmdDetails] });

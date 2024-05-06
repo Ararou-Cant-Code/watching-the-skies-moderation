@@ -1,5 +1,5 @@
-import { ClientEvents } from "discord.js";
-import { Client } from "./Client.js";
+import { type ClientEvents } from "discord.js";
+import { type Client } from "./Client.js";
 
 export interface ListenerOptions {
   name: string;

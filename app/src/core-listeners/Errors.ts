@@ -10,7 +10,7 @@ export default abstract class ClientReadyListener extends Listener {
     });
   }
 
-  public override run = async () => {
+  public override run = () => {
     process.on("unhandledRejection", async (m: unknown) => {
       this.client.logger.error(m as string);
     });

@@ -1,6 +1,6 @@
-import Command, { CommandContext } from "../../lib/structures/Command.js";
-import Args from "../../lib/structures/Args.js";
-import Context from "../../lib/structures/Context.js";
+import { Command, type CommandContext } from "../../lib/structures/Command.js";
+import type Args from "../../lib/structures/Args.js";
+import type Context from "../../lib/structures/Context.js";
 import { EmbedBuilder, Colors, time } from "discord.js";
 
 export default abstract class CaseCommand extends Command {
@@ -34,10 +34,10 @@ export default abstract class CaseCommand extends Command {
         infraction.type === "Unmute" || infraction.type === "Unban"
           ? Colors.Green
           : infraction.type === "Warn" || infraction.type === "Mute"
-          ? Colors.Yellow
-          : infraction.type === "Ban"
-          ? Colors.Red
-          : Colors.DarkButNotBlack
+            ? Colors.Yellow
+            : infraction.type === "Ban"
+              ? Colors.Red
+              : Colors.DarkButNotBlack,
       )
       .setAuthor({
         name: ctx.message.guild!.name,

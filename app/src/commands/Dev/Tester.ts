@@ -1,6 +1,4 @@
-import Command, { CommandContext } from "../../lib/structures/Command.js";
-import Args from "../../lib/structures/Args.js";
-import Context from "../../lib/structures/Context.js";
+import { Command, type CommandContext } from "../../lib/structures/Command.js";
 
 export default abstract class TesterCommand extends Command {
   public constructor(context: CommandContext) {
@@ -10,7 +8,7 @@ export default abstract class TesterCommand extends Command {
     });
   }
 
-  public override run = async (ctx: Context, args: Args) => {
+  public override run = async () => {
     throw new Error("You thought.");
   };
 }

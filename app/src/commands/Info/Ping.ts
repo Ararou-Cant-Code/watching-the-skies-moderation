@@ -1,6 +1,6 @@
-import Command, { CommandContext } from "../../lib/structures/Command.js";
+import { Command, type CommandContext } from "../../lib/structures/Command.js";
 import { DurationFormatter } from "@sapphire/time-utilities";
-import Context from "../../lib/structures/Context.js";
+import type Context from "../../lib/structures/Context.js";
 import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 
 export default abstract class PingCommand extends Command {

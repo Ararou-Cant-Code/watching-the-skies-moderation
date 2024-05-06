@@ -1,5 +1,5 @@
 import { type GuildMember } from "discord.js";
-import { GuildConfigOptions } from "../utils/constants";
+import { type GuildConfigOptions } from "../utils/constants.js";
 
 export default class Checks {
   public isStaff = (member: GuildMember, guildConfig: GuildConfigOptions) => {

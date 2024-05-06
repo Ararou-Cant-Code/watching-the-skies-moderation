@@ -1,7 +1,7 @@
 export class ArgumentFailed extends Error {
-  public name: string = "ArgumentFailed";
+  public override name: string = "ArgumentFailed";
   public reason: string;
-  public message: string;
+  public override message: string;
 
   public constructor(reason: string) {
     super(`A \`${reason}\` argument is required for this command.`);
@@ -12,8 +12,8 @@ export class ArgumentFailed extends Error {
 }
 
 export class GenericFailure extends Error {
-  public name: string = "GenericFailure";
-  public message: string;
+  public override name: string = "GenericFailure";
+  public override message: string;
 
   public constructor(message: string) {
     super(message);
@@ -23,8 +23,8 @@ export class GenericFailure extends Error {
 }
 
 export class PublicFailure extends Error {
-  public name: string = "PublicFailure";
-  public message: string;
+  public override name: string = "PublicFailure";
+  public override message: string;
 
   public constructor(message: string) {
     super(message);
@@ -34,9 +34,9 @@ export class PublicFailure extends Error {
 }
 
 export class CommandRunFailure extends Error {
-  public name: string = "CommandRunFailure";
+  public override name: string = "CommandRunFailure";
   public reason: string;
-  public message: string;
+  public override message: string;
 
   public constructor(reason: string) {
     super(`Failed to run a command due to "${reason}"`);
