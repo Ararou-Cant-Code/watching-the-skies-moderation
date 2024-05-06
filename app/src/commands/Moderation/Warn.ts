@@ -7,6 +7,7 @@ export default abstract class WarnCommand extends Command {
   public constructor(context: CommandContext) {
     super(context, {
       name: "Warn",
+      flags: ["silent", "s", "permanent", "perm", "p"],
       permissions: {
         staff: true,
       },
@@ -27,9 +28,9 @@ export default abstract class WarnCommand extends Command {
         guildId: ctx.message.guild!.id,
         moderatorId: ctx.author.id,
         reason,
-        expiresAtString: "14d",
+        expiresAtString: args.getFlags("permanent", "perm", "p") ? null : "14d",
       },
       this.context.client,
-    ).issue(ctx.message);
+    ).issue(ctx.message, args);
   };
 }

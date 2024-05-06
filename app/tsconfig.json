@@ -3,10 +3,13 @@
   "compilerOptions": {
     "target": "ESNext",
     "lib": ["ESNext"],
+    "tsBuildInfoFile": "dist/.tsbuildinfo",
     "rootDir": "src",
     "outDir": "dist",
     "noImplicitReturns": false,
     "experimentalDecorators": true,
     "skipLibCheck": true
-  }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }
