@@ -1,7 +1,18 @@
 import { EmbedBuilder, Message, type EmbedField, type Guild } from "discord.js";
-import { type CommandContext } from "../structures/Command.js";
+import { Command, type CommandContext } from "../structures/Command.js";
 import { Client } from "../structures/Client.js";
 import type { RawGuildStore } from "./constants.js";
+
+export function ApplyCommandOptions<O extends Command.Options>(options: O) {
+  return function <C extends { new (...args: any[]): {} }>(constructor: C) {
+    return class extends constructor {
+      public options = options;
+
+      public name = options.name;
+      public aliases = options.aliases || [];
+    };
+  };
+}
 
 export const handleMessage = async (message: Message, context: CommandContext, content: string) => {
   if (

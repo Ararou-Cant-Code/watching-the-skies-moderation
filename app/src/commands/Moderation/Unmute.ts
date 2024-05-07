@@ -1,20 +1,18 @@
-import { Command, type CommandContext } from "../../lib/structures/Command.js";
+import { Command } from "../../lib/structures/Command.js";
 import type Args from "../../lib/structures/Args.js";
 import type Context from "../../lib/structures/Context.js";
 import { UnmuteInfraction } from "../../lib/infractions/Unmute.js";
+import { ApplyCommandOptions } from "../../lib/utils/functions.js";
 
-export default abstract class UnmuteCommand extends Command {
-  public constructor(context: CommandContext) {
-    super(context, {
-      name: "Unmute",
-      aliases: ["um", "unm"],
-      permissions: {
-        staff: true,
-      },
-      description: "Unmutes someone for a provided reason and duration.",
-    });
-  }
-
+@ApplyCommandOptions<Command.Options>({
+  name: "Unmute",
+  aliases: ["um", "unm"],
+  permissions: {
+    staff: true,
+  },
+  description: "Unmutes someone for a provided reason and duration.",
+})
+export default class UnmuteCommand extends Command {
   public override run = async (ctx: Context, args: Args) => {
     const member = await args.returnMemberFromIndex(0).catch(() => null);
     if (!member) return ctx.reply("That is not a member.");

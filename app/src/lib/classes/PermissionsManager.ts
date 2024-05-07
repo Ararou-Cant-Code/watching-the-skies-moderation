@@ -12,7 +12,12 @@ export class PermissionsManager {
     this.client = client;
   }
 
-  public messageRun = (message: Message, guildConfig: GuildConfigOptions) => {
+  public messageRun = (message: Message, type: RunTypes, guildConfig: GuildConfigOptions) => {
+    switch (type) {
+      case "STAFF":
+        return "";
+    }
+
     return this.#checkForStaff(message, guildConfig);
   };
 
@@ -28,3 +33,5 @@ export class PermissionsManager {
     );
   };
 }
+
+type RunTypes = "STAFF" | "HMOD" | "ADMIN" | "MANAGER" | "OWNER" | "DEV" | "BOT_COMMANDS";

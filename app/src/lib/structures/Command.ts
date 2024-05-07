@@ -8,7 +8,6 @@ import {
   type SlashCommandBuilder,
 } from "discord.js";
 import { Client } from "./Client.js";
-import { client } from "../../index.js";
 import { PrismaClient } from "@prisma/client";
 import Args from "./Args.js";
 import { Lexer } from "@sapphire/lexure";
@@ -19,20 +18,19 @@ import { guildConfigs } from "./GuildConfigs.js";
 export abstract class Command {
   public checks: Checks;
   public lexer: Lexer;
-  public context: CommandContext;
+  public context: CommandContext = null!;
 
   public directory?: string;
 
-  public options: CommandOptions;
+  public options: CommandOptions = null!;
 
-  public name: string;
+  public name: string = null!;
   public aliases?: string[];
 
   public constructor(context: CommandContext, options: CommandOptions) {
-    this.context = context ?? { client };
+    this.name = options ? options.name : "";
     this.options = options;
-    this.name = options.name;
-    this.aliases = options.aliases;
+    this.context = context;
 
     this.checks = new Checks();
     this.lexer = new Lexer({
@@ -102,9 +100,10 @@ export abstract class Command {
 
 export namespace Command {
   export type Context = CommandContext;
+  export type Options = CommandOptions;
 }
 
-interface CommandOptions {
+export interface CommandOptions {
   slashCapable?: boolean | false;
   data?: Omit<SlashCommandBuilder, "addSubcommand" | "addSubcommandGroup">;
   name: string;

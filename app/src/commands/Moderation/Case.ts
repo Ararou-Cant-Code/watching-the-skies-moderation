@@ -1,19 +1,17 @@
-import { Command, type CommandContext } from "../../lib/structures/Command.js";
+import { Command } from "../../lib/structures/Command.js";
 import type Args from "../../lib/structures/Args.js";
 import type Context from "../../lib/structures/Context.js";
 import { EmbedBuilder, Colors, time } from "discord.js";
+import { ApplyCommandOptions } from "../../lib/utils/functions.js";
 
-export default abstract class CaseCommand extends Command {
-  public constructor(context: CommandContext) {
-    super(context, {
-      name: "Case",
-      permissions: {
-        staff: true,
-      },
-      description: "Views a punishment.",
-    });
-  }
-
+@ApplyCommandOptions<Command.Options>({
+  name: "Case",
+  permissions: {
+    staff: true,
+  },
+  description: "Views a punishment.",
+})
+export default class CaseCommand extends Command {
   public override run = async (ctx: Context, args: Args) => {
     const id = await args.getNumberIndex(0).catch(() => null);
     if (!id) return ctx.reply("That is not an ID.");

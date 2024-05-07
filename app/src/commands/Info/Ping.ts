@@ -1,24 +1,22 @@
-import { Command, type CommandContext } from "../../lib/structures/Command.js";
+import { Command } from "../../lib/structures/Command.js";
 import { DurationFormatter } from "@sapphire/time-utilities";
 import type Context from "../../lib/structures/Context.js";
 import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
+import { ApplyCommandOptions } from "../../lib/utils/functions.js";
 
-export default abstract class PingCommand extends Command {
-  public constructor(context: CommandContext) {
-    super(context, {
-      slashCapable: true,
-      data: new SlashCommandBuilder()
-        .setName("ping")
-        .setDescription("Get bot latency.")
-        .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages),
-      name: "Ping",
-      permissions: {
-        commands_channel: true,
-      },
-      description: "Get bot latency.",
-    });
-  }
-
+@ApplyCommandOptions<Command.Options>({
+  slashCapable: true,
+  data: new SlashCommandBuilder()
+    .setName("ping")
+    .setDescription("Get bot latency.")
+    .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages),
+  name: "Ping",
+  permissions: {
+    commands_channel: true,
+  },
+  description: "Get bot latency.",
+})
+export default class PingCommand extends Command {
   public override run = async (ctx: Context) => {
     const msg = await ctx.reply("Pinging...");
     return msg.edit(

@@ -1,20 +1,18 @@
-import { Command, type CommandContext } from "../../lib/structures/Command.js";
+import { Command } from "../../lib/structures/Command.js";
 import type Args from "../../lib/structures/Args.js";
 import type Context from "../../lib/structures/Context.js";
 import { BanInfraction } from "../../lib/infractions/Ban.js";
+import { ApplyCommandOptions } from "../../lib/utils/functions.js";
 
-export default abstract class BanCommand extends Command {
-  public constructor(context: CommandContext) {
-    super(context, {
-      name: "Ban",
-      aliases: ["b", "out", "getout", "gt", "gtfo"],
-      permissions: {
-        staff: true,
-      },
-      description: "Bans someone for a provided reason.",
-    });
-  }
-
+@ApplyCommandOptions<Command.Options>({
+  name: "Ban",
+  aliases: ["b", "out", "getout", "gt", "gtfo"],
+  permissions: {
+    staff: true,
+  },
+  description: "Bans someone for a provided reason.",
+})
+export default class BanCommand extends Command {
   public override run = async (ctx: Context, args: Args) => {
     const user = await args.returnUserFromIndex(0).catch(() => null);
     if (!user) return ctx.reply("That is not a user.");

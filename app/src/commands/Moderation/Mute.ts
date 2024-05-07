@@ -1,21 +1,19 @@
-import { Command, type CommandContext } from "../../lib/structures/Command.js";
+import { Command } from "../../lib/structures/Command.js";
 import type Args from "../../lib/structures/Args.js";
 import type Context from "../../lib/structures/Context.js";
 import { Duration, Time } from "@sapphire/time-utilities";
 import { MuteInfraction } from "../../lib/infractions/Mute.js";
+import { ApplyCommandOptions } from "../../lib/utils/functions.js";
 
-export default abstract class MuteCommand extends Command {
-  public constructor(context: CommandContext) {
-    super(context, {
-      name: "Mute",
-      aliases: ["m", "shut"],
-      permissions: {
-        staff: true,
-      },
-      description: "Mutes someone for a provided reason and duration.",
-    });
-  }
-
+@ApplyCommandOptions<Command.Options>({
+  name: "Mute",
+  aliases: ["m", "shut"],
+  permissions: {
+    staff: true,
+  },
+  description: "Mutes someone for a provided reason and duration.",
+})
+export default class MuteCommand extends Command {
   public override run = async (ctx: Context, args: Args) => {
     const member = await args.returnMemberFromIndex(0).catch(() => null);
     if (!member) return ctx.reply("That is not a member.");

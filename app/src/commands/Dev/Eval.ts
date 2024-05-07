@@ -1,21 +1,19 @@
 import { codeBlock } from "discord.js";
-import { Command, type CommandContext } from "../../lib/structures/Command.js";
+import { Command } from "../../lib/structures/Command.js";
 import type Args from "../../lib/structures/Args.js";
 import type Context from "../../lib/structures/Context.js";
 import { inspect } from "node:util";
+import { ApplyCommandOptions } from "../../lib/utils/functions.js";
 
-export default abstract class EvalCommand extends Command {
-  public constructor(context: CommandContext) {
-    super(context, {
-      name: "Eval",
-      permissions: { dev: true },
-      description: "Eval a line of code.",
-      detailedDescription: {
-        usage: "<code: String>",
-      },
-    });
-  }
-
+@ApplyCommandOptions<Command.Options>({
+  name: "Eval",
+  permissions: { dev: true },
+  description: "Eval a line of code.",
+  detailedDescription: {
+    usage: "<code: String>",
+  },
+})
+export default class EvalCommand extends Command {
   public override run = async (ctx: Context, args: Args) => {
     if (ctx.author.id !== "840213882147831879") throw "Bad.";
 

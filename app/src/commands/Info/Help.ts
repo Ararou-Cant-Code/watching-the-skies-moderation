@@ -1,22 +1,20 @@
 import { type APIEmbedField, EmbedBuilder, Collection } from "discord.js";
-import { Command, type CommandContext } from "../../lib/structures/Command.js";
+import { Command } from "../../lib/structures/Command.js";
 import type Args from "../../lib/structures/Args.js";
 import type Context from "../../lib/structures/Context.js";
+import { ApplyCommandOptions } from "../../lib/utils/functions.js";
 
-export default abstract class HelpCommand extends Command {
-  public constructor(context: CommandContext) {
-    super(context, {
-      name: "Help",
-      permissions: {
-        commands_channel: true,
-      },
-      description: "View commands on the bot.",
-      detailedDescription: {
-        usage: "(Views all commands) | <commandName: string> (Views information on a command)",
-      },
-    });
-  }
-
+@ApplyCommandOptions<Command.Options>({
+  name: "Help",
+  permissions: {
+    commands_channel: true,
+  },
+  description: "View commands on the bot.",
+  detailedDescription: {
+    usage: "(Views all commands) | <commandName: string> (Views information on a command)",
+  },
+})
+export default class HelpCommand extends Command {
   public override run = async (ctx: Context, args: Args) => {
     const cmdDetails = new EmbedBuilder();
     const embedFields: APIEmbedField[] = [];
