@@ -1,8 +1,8 @@
 import { Command } from "../../lib/structures/Command.js";
 import type Args from "../../lib/structures/Args.js";
 import type Context from "../../lib/structures/Context.js";
-import type { GuildConfigOptions } from "../../lib/utils/constants.js";
 import { ApplyCommandOptions } from "../../lib/utils/functions.js";
+import { guildConfigs } from "../../lib/structures/GuildConfigs.js";
 
 @ApplyCommandOptions<Command.Options>({
   name: "Invalidatecase",
@@ -24,13 +24,7 @@ export default class InvalidatecaseCommand extends Command {
     });
     if (!infraction) return ctx.reply("That is not a valid infraction.");
 
-    if (
-      !this.checks.isHmod(
-        ctx.member!,
-        this.context.client.stores.get("guilds")!.get(ctx.message.guild!.id)! as GuildConfigOptions,
-      ) &&
-      infraction.moderatorId !== ctx.author.id
-    )
+    if (!this.checks.isHmod(ctx.member!, guildConfigs.get(ctx.guild.id)!) && infraction.moderatorId !== ctx.author.id)
       return ctx.reply("You cannot modify a punishment that was not issued by you.");
 
     await this.context.client.db.infractions.update({

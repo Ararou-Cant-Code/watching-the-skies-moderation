@@ -15,5 +15,5 @@ export default abstract class AutomodListener extends Listener {
     if (message.member?.partial) await message.member.fetch();
 
     return this.client.automod.run(message, automodRunFunctions);
-  }
+  };
 }

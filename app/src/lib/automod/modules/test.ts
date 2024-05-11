@@ -9,6 +9,8 @@ export default class TestAutomodModule {
   }
 
   public run = async (message: Message) => {
+    if (message.guild!.id !== "1235442068189347840") return false;
+
     if (message.content.includes("test")) {
       return this.logic.handleInfraction(message, "Sending test.");
     }

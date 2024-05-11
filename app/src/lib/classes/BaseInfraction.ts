@@ -2,9 +2,11 @@ import { InfractionTypes, type Infractions } from "@prisma/client";
 import { Duration } from "@sapphire/time-utilities";
 import { Colors, EmbedBuilder, WebhookClient, time, type Message } from "discord.js";
 import { type Client } from "../structures/Client.js";
+import Checks from "./Checks.js";
 
 export class BaseInfraction {
   public client: Client;
+  public checks: Checks = new Checks();
 
   public type: InfractionTypes;
   public id: string;
