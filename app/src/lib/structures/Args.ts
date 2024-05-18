@@ -65,6 +65,13 @@ export default class Args {
     return Number(this.commandArgs[index]);
   };
 
+  public getNumberRest = async (index: number = 1) => {
+    if (!this.commandArgs.length) throw new ArgumentError("The raw array is likely empty.");
+    if (Number.isNaN(this.commandArgs[index])) throw new ArgumentError("The provided raw data is invalid.");
+
+    return Number(this.commandArgs.slice(index).join(" "));
+  };
+
   public getFlags = (...keys: readonly string[]) => {
     if (!this.command!.options.flags!) return false; // Command has no flags defined in options.
 
