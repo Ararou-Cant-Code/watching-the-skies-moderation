@@ -1,15 +1,9 @@
 import { Command } from "../../lib/structures/Command.js";
 import { DurationFormatter } from "@sapphire/time-utilities";
 import type Context from "../../lib/structures/Context.js";
-import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { ApplyCommandOptions } from "../../lib/utils/functions.js";
 
 @ApplyCommandOptions<Command.Options>({
-  slashCapable: true,
-  data: new SlashCommandBuilder()
-    .setName("ping")
-    .setDescription("Get bot latency.")
-    .setDefaultMemberPermissions(PermissionFlagsBits.SendMessages),
   name: "Ping",
   permissions: {
     commands_channel: true,
