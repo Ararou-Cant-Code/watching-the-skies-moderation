@@ -24,14 +24,6 @@ export default abstract class MessageCommandsListener extends Listener {
   public override run = async (message: Message) => {
     if (message.author.bot) return;
 
-    const blacklistedData = await this.client.db.blacklists.findFirst({
-      where: {
-        guildId: message.guild!.id,
-        userId: message.author.id,
-      },
-    });
-    if (blacklistedData) return;
-
     const prefixRegex = new RegExp(`^(<@!?${this.client.user!.id}>|${escapeRegex(this.client.defaultPrefix!)})\s*`);
     if (!prefixRegex.test(message.content)) return;
 
@@ -45,6 +37,25 @@ export default abstract class MessageCommandsListener extends Listener {
       this.client.stores.get("commands")!.get(this.client.stores.get("aliases")!.get(command)! as string);
 
     if (!cmd) return;
+
+    const blacklistedData = await this.client.db.blacklists
+      .findFirst({
+        where: {
+          guildId: message.guild!.id,
+          userId: message.author.id,
+        },
+      })
+      .catch((e) =>
+        message.author.id !== this.client.developerId
+          ? message
+              .reply(
+                "A catastrophic database error has occured, and your command couldn't be executed. Please contact a developer.",
+              )
+              .then(() => this.client.logger.error(e))
+              .then(() => true)
+          : false,
+      );
+    if (blacklistedData) return;
 
     cmd.context.executed = {
       message,
