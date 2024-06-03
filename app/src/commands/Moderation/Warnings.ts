@@ -37,7 +37,7 @@ export default class WarningsCommand extends Command {
         content: `${ctx.user.id === member.id ? "You" : "They"} do not have any active punishments.`,
       });
 
-    for (const infraction of infractions) {
+    for (const infraction of infractions.sort((a, b) => a.id - b.id)) {
       infractionFields.push({
         name: `${infraction.type} #${infraction.id}${this.checks.isStaff(member!, guildConfigs.get(ctx.guild!.id)!) ? ` | Issued by: ${infraction.moderatorId}` : ""}`,
         value: [
