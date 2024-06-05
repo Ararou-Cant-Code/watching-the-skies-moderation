@@ -53,11 +53,17 @@ const updateMutes = async () => {
           invalid: true,
         },
       })
-      .then(() =>
+      .then(async () => {
+        const user = await client.users.fetch(infraction.memberId);
+        const guild = await client.guilds.fetch(infraction.guildId);
+
+        await user.send(
+          `Your punishment \`${infraction.type.toLowerCase()}\` in **${guild.name}** has been invalidated as enough time has passed since you were muted.`,
+        );
         client.logger.debug(
           `Infraction ${infraction.type} in ${infraction.guildId} for ${infraction.memberId} has been updated to be invalid.`,
-        ),
-      );
+        );
+      });
   }
 
   return client.logger.debug("Done checking for mutes.");
