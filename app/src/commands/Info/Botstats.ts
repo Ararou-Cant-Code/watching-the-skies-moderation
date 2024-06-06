@@ -30,7 +30,7 @@ export default class BotstatsCommand extends Command {
       })
       .setDescription(
         [
-          `**Uptime:**\n> Client: **${formatter.format(clientUptime * 1000)}**\n> Node Uptime: **${formatter.format(nodeUptime)}**`,
+          `**Uptime:**\n> Client: **${formatter.format(clientUptime)}**\n> Node Uptime: **${formatter.format(nodeUptime * 1000)}**`,
           `**Versions:**\n> discord.js: **${DJSVersion}**\n> node.js: **${nodeVersion}**`,
           `**Memory Usage:**\n> Heap Used: **${(memoryUsage.heapUsed / 1024 / 1024).toFixed(0)}mb**\n> RSS: **${(memoryUsage.rss / 1024 / 1024).toFixed(0)}mb**`,
         ].join("\n"),

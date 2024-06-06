@@ -1,3 +1,4 @@
+import { InfractionTypes } from "@prisma/client";
 import type Args from "../../lib/structures/Args.js";
 import { Command } from "../../lib/structures/Command.js";
 import type Context from "../../lib/structures/Context.js";
@@ -24,7 +25,7 @@ export default class NoteCommand extends Command {
 
     await this.context.db.infractions.create({
       data: {
-        type: "Note",
+        type: InfractionTypes.Note,
         guildId: ctx.guild.id,
         moderatorId: ctx.author.id,
         memberId: user.id,
