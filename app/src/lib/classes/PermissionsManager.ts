@@ -12,13 +12,13 @@ export class PermissionsManager {
     this.client = client;
   }
 
-  public messageRun = (message: Message, type: RunTypes, guildConfig: GuildConfigOptions) => {
+  public messageRun = (message: Message, type: RunTypes, guildConfig: GuildConfigOptions): boolean | RunTypes => {
     switch (type) {
       case "STAFF":
-        return "";
+        if (this.#checkForStaff(message, guildConfig)) return "STAFF";
     }
 
-    return this.#checkForStaff(message, guildConfig);
+    return false;
   };
 
   #checkForStaff = (message: Message, guildConfig: GuildConfigOptions) => {

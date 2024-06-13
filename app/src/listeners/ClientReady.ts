@@ -5,6 +5,9 @@ import type { GuildConfigOptions } from "../lib/utils/constants.js";
 import type { Command } from "../lib/structures/Command.js";
 import { guildConfigs } from "../lib/structures/GuildConfigs.js";
 
+const guildCollectionData: Collection<string, { guild: Guild | OAuth2Guild; config?: GuildConfigOptions }> =
+  new Collection();
+
 export default abstract class ClientReadyListener extends Listener {
   public constructor(client: Client) {
     super(client, {
@@ -31,18 +34,16 @@ export default abstract class ClientReadyListener extends Listener {
     // Handle Stores
     for (const guild of (await this.client.guilds.fetch()).values()) {
       try {
-        const guildCollectionData: Collection<string, { guild: Guild | OAuth2Guild; config?: GuildConfigOptions }> =
-          new Collection();
         guildCollectionData.set(guild.id, {
           guild,
           config: guildConfigs.get(guild.id),
         });
-
-        this.client.stores.set("guilds", guildCollectionData);
       } catch (err) {
         continue;
       }
     }
+
+    this.client.stores.set("guilds", guildCollectionData);
   };
 
   private handleSlashCommands = async () => {
