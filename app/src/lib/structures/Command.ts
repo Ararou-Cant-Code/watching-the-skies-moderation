@@ -4,8 +4,6 @@ import {
   type PermissionsBitField,
   type User,
   type Channel,
-  type ChatInputCommandInteraction,
-  type SlashCommandBuilder,
 } from "discord.js";
 import { Client } from "./Client.js";
 import { PrismaClient } from "@prisma/client";
@@ -104,8 +102,6 @@ export namespace Command {
 }
 
 export interface CommandOptions {
-  slashCapable?: boolean | false;
-  data?: Omit<SlashCommandBuilder, "addSubcommand" | "addSubcommandGroup">;
   name: string;
   aliases?: string[];
   flags?: string[];
@@ -130,7 +126,7 @@ export interface CommandContext {
   directory: string;
 
   executed?: {
-    message: Message | ChatInputCommandInteraction;
+    message: Message;
     user: User;
     userRoles?: string[] | null;
     guild: Guild;

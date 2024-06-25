@@ -13,8 +13,6 @@ const listenersCollection: Collection<string, Listener> = new Collection();
 const commandsCollection: Collection<string, Command> = new Collection();
 const aliasesCollection: Collection<string, string> = new Collection();
 
-const slashCommandsCollection: Collection<string, Command> = new Collection();
-
 export class Client extends DiscordClient {
   public sentryHandler = new SentryHandler({ client: this }, { sendEmbed: true, sendLogToConsole: true });
   public logger = new Logger();
@@ -63,9 +61,6 @@ export class Client extends DiscordClient {
 
         commandsCollection.set(command.name.toLowerCase(), command);
         this.stores.set("commands", commandsCollection);
-
-        slashCommandsCollection.set(command.name.toLowerCase(), command);
-        this.stores.set("slash-commands", slashCommandsCollection);
 
         if (command.aliases)
           command.aliases.forEach((alias) => aliasesCollection.set(alias.toLowerCase(), command.name.toLowerCase()));
