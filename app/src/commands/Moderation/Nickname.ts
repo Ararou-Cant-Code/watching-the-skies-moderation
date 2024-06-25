@@ -9,6 +9,9 @@ import type Args from "../../lib/structures/Args.js";
   permissions: {
     staff: true,
   },
+  detailedDescription: {
+    usage: "<member> [nickname]"
+  },
   description: "Set a members nickname.",
 })
 export default class NicknameCommand extends Command {

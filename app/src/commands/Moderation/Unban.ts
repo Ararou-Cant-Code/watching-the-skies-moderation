@@ -10,6 +10,9 @@ import { ApplyCommandOptions } from "../../lib/utils/functions.js";
   permissions: {
     staff: true,
   },
+  detailedDescription: {
+    usage: "<member> <reason>"
+  },
   description: "Unbans someone for a provided reason.",
 })
 export default class UnbanCommand extends Command {

@@ -11,6 +11,9 @@ import { time, type EmbedField } from "discord.js";
   permissions: {
     commands_channel: true,
   },
+  detailedDescription: {
+    usage: "[member (Defaults to message.member)]",
+  },
   description: "Get all warnings on a user.",
 })
 export default class WarningsCommand extends Command {
@@ -38,13 +41,11 @@ export default class WarningsCommand extends Command {
       });
 
     for (const infraction of infractions.sort((a, b) => a.id - b.id)) {
+      if (!this.checks.isStaff(ctx.member!, guildConfigs.get(ctx.guild!.id)!) && infraction.type === "Note") continue;
+
       infractionFields.push({
-        name: `${infraction.type} #${infraction.id}${this.checks.isStaff(member!, guildConfigs.get(ctx.guild!.id)!) ? ` | Issued by: ${infraction.moderatorId}` : ""}`,
-        value: [
-          `> **Reason:** \`${infraction.reason}\``,
-          `> **Issued On:** ${time(infraction.issuedAt, "F")}`,
-          `> **Expires:** ${infraction.expiresAt ? time(infraction.expiresAt, "F") + " (" + time(infraction.expiresAt, "R") + ") " : "Never"}`,
-        ].join("\n"),
+        name: `${infraction.type} #${infraction.id}`,
+        value: `> ${this.checks.isStaff(ctx.member!, guildConfigs.get(ctx.guild!.id)!) ? `\`${(await this.context.client.users.fetch(infraction.moderatorId)).username}\`: ` : ""}**${infraction.reason}**\nThis infraction was issued on ${time(infraction.issuedAt, "F")}${infraction.expiresAt ? " and expires " + time(infraction.expiresAt, "R") + " on " + time(infraction.expiresAt, "R") + ". " : "."}`,
         inline: false,
       });
     }
@@ -56,6 +57,7 @@ export default class WarningsCommand extends Command {
         name: `${member.user.username} (${member.id})`,
         iconURL: member.displayAvatarURL(),
       })
+      .setColor(0xffb6c1)
       .setTitle(
         `Found ${infractions.length} infraction${infractions.length === 1 ? "" : "s"} issued to ${member.user.username}.`,
       )

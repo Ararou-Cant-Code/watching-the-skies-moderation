@@ -7,7 +7,6 @@ import { type Command } from "./Command.js";
 import Sentry from "@sentry/node";
 import { PrismaClient } from "@prisma/client";
 import SentryHandler from "../classes/SentryHandler.js";
-import Automod from "./Automod.js";
 
 const listenersCollection: Collection<string, Listener> = new Collection();
 
@@ -17,7 +16,6 @@ const aliasesCollection: Collection<string, string> = new Collection();
 const slashCommandsCollection: Collection<string, Command> = new Collection();
 
 export class Client extends DiscordClient {
-  public automod = new Automod();
   public sentryHandler = new SentryHandler({ client: this }, { sendEmbed: true, sendLogToConsole: true });
   public logger = new Logger();
   public db = new PrismaClient();

@@ -41,24 +41,24 @@ export default class CaseCommand extends Command {
         name: ctx.message.guild!.name,
         iconURL: ctx.message.guild!.iconURL() || this.context.client.user!.displayAvatarURL(),
       })
-      .setTitle(`${infraction.invalid ? "🔴 [INVALID] " : ""}${infraction.type} \`(Case #${infraction.id})\``)
+      .setTitle(`${infraction.invalid ? "🔴 [INVALID] " : ""}${infraction.type} \`#${infraction.id}\``)
       .setDescription("Case Details")
       .addFields([
         {
-          name: "Target",
-          value: `> ${user} \`(${user.username} - ${user.id})\``,
+          name: "Member",
+          value: `${user} \`(${user.username} - ${user.id})\``,
         },
         {
           name: "Moderator",
-          value: `> ${moderator} \`(${moderator.username} - ${moderator.id})\``,
+          value: `${moderator} \`(${moderator.username} - ${moderator.id})\``,
         },
         {
-          name: "Issued For",
-          value: `> ${infraction.reason}`,
+          name: "Reason",
+          value: `${infraction.reason}`,
         },
         {
-          name: "Issued On",
-          value: `> ${time(infraction.issuedAt, "F")}`,
+          name: "Date",
+          value: `${time(infraction.issuedAt, "F")}`,
         },
       ]);
 
@@ -66,7 +66,7 @@ export default class CaseCommand extends Command {
       caseEmbed.addFields([
         {
           name: "Expires",
-          value: `> ${time(infraction.expiresAt, "F")} (${time(infraction.expiresAt, "R")})`,
+          value: `${time(infraction.expiresAt, "F")} (${time(infraction.expiresAt, "R")})`,
         },
       ]);
 

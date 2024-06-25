@@ -46,22 +46,18 @@ export class BaseInfraction {
 
     const submitMessage = `${
       formatter.emojis! && formatter.emojis!.issued !== "" ? formatter.emojis!.issued + " " : ""
-    }${this.#addCharcters(infraction).charAt(0).toUpperCase()}${this.#addCharcters(infraction)
+    }${user} \`(${user.id})\` has been **${this.#addCharcters(infraction).charAt(0).toLowerCase()}${this.#addCharcters(
+      infraction,
+    )
       .slice(1)
-      .toLowerCase()} ${user} \`(${user.id})\` for \`${this.reason}\` with infraction ID \`${infraction.id}\``;
+      .toLowerCase()}** for \`${this.reason}\``;
 
-    return message.channel.send({
-      embeds: [
-        {
-          color: formatter.colour!,
-          description: submitMessage,
-        },
-      ],
-    });
+    return message.channel.send({ content: submitMessage, allowedMentions: { parse: [] } });
   };
 
   public sendDm = async (message: Message, infraction: Infractions) => {
     const user = await this.client.users.fetch(this.memberId);
+    const formatter = await this.#format(infraction.type);
 
     const dmContent = `Hello **${user.username}**, you've been **${this.#addCharcters(infraction)}** ${
       infraction.type === InfractionTypes.Ban ? "from" : "in"
@@ -78,6 +74,7 @@ export class BaseInfraction {
                 name: this.client.user!.tag,
                 icon_url: this.client.user!.displayAvatarURL(),
               },
+              color: formatter.colour || Colors.DarkButNotBlack,
               title: `Case #\`${infraction.id}\``,
               description: dmContent,
               fields: [
@@ -99,6 +96,7 @@ export class BaseInfraction {
                 name: this.client.user!.tag,
                 icon_url: this.client.user!.displayAvatarURL(),
               },
+              color: formatter.colour || Colors.DarkButNotBlack,
               title: `Case #\`${infraction.id}\``,
               description: dmContent,
             },
@@ -119,24 +117,23 @@ export class BaseInfraction {
         name: message.guild!.name,
         iconURL: message.guild!.iconURL() || this.client.user!.displayAvatarURL(),
       })
-      .setTitle(`${this.type} \`(Case #${infraction.id})\``)
-      .setDescription("Case Details")
+      .setTitle(`${this.type} \`#${infraction.id}\``)
       .addFields([
         {
-          name: "Target",
-          value: `> ${user} \`(${user.username} - ${user.id})\``,
+          name: "Member",
+          value: `${user} \`(${user.username} - ${user.id})\``,
         },
         {
           name: "Moderator",
-          value: `> ${moderator} \`(${moderator.username} - ${moderator.id})\``,
+          value: `${moderator} \`(${moderator.username} - ${moderator.id})\``,
         },
         {
-          name: "Issued For",
-          value: `> ${this.reason}`,
+          name: "Reason",
+          value: `${this.reason}`,
         },
         {
-          name: "Issued On",
-          value: `> ${time(this.issuedAt, "F")}`,
+          name: "Date",
+          value: `${time(this.issuedAt, "F")}`,
         },
       ]);
 
@@ -144,7 +141,7 @@ export class BaseInfraction {
       logEmbed.addFields([
         {
           name: "Expires",
-          value: `> ${time(this.expiresAt, "F")} (${time(this.expiresAt, "R")})`,
+          value: `${time(this.expiresAt, "F")} (${time(this.expiresAt, "R")})`,
         },
       ]);
 

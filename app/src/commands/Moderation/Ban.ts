@@ -10,6 +10,9 @@ import { ApplyCommandOptions } from "../../lib/utils/functions.js";
   permissions: {
     staff: true,
   },
+  detailedDescription: {
+    usage: "<member> <reason>"
+  },
   description: "Bans someone for a provided reason.",
 })
 export default class BanCommand extends Command {

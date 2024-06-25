@@ -10,6 +10,9 @@ import { ApplyCommandOptions } from "../../lib/utils/functions.js";
   permissions: {
     staff: true,
   },
+  detailedDescription: {
+    usage: "<member> <reason>"
+  },
   description: "Unmutes someone for a provided reason and duration.",
 })
 export default class UnmuteCommand extends Command {

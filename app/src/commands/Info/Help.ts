@@ -43,7 +43,7 @@ export default class HelpCommand extends Command {
       return ctx.reply({
         embeds: [
           {
-            color: 0xd1daf9,
+            color: 0xffb6c1,
             fields: embedFields,
           },
         ],
@@ -58,13 +58,13 @@ export default class HelpCommand extends Command {
       return ctx.reply({
         embeds: [
           {
-            color: 0xd1daf9,
+            color: 0xffb6c1,
             fields: embedFields,
           },
         ],
       });
 
-    cmdDetails.setColor(0xd1daf9).setAuthor({
+    cmdDetails.setColor(0xffb6c1).setAuthor({
       name: this.context.client.user!.username,
       iconURL: this.context.client.user!.displayAvatarURL(),
     });
@@ -73,21 +73,24 @@ export default class HelpCommand extends Command {
         command.options.detailedDescription?.usage ? ` ${command.options.detailedDescription.usage}` : ""
       }`,
     );
-    if (
-      command.options.description ||
-      command.options.aliases ||
-      command.options.detailedDescription ||
-      command.options.permissions
-    )
-      cmdDetails.setDescription(
-        `${command.options.description ? `**Description:** ${command.options.description}` : ""}${
-          command.options.aliases ? `\n**Aliases:** ${command.options.aliases.join(", ")}` : ""
-        }${
-          command.options.detailedDescription && command.options.detailedDescription.examples
-            ? `**Example(s)** ${command.options.detailedDescription.examples.join("\n")}`
-            : ""
-        }`,
-      );
+
+    if (command.options.description) cmdDetails.setDescription(command.options.description);
+
+    if (command.options.aliases)
+      cmdDetails.addFields([
+        {
+          name: "Aliases",
+          value: `> ${command.options.aliases.map((alias) => `\`${alias}\``).join(", ")}`,
+        },
+      ]);
+
+    if (command.options.flags)
+      cmdDetails.addFields([
+        {
+          name: "Flags",
+          value: `> ${command.options.flags.map((flag) => `\`${flag}\``).join(", ")}`,
+        },
+      ]);
 
     return ctx.reply({ embeds: [cmdDetails] });
   };

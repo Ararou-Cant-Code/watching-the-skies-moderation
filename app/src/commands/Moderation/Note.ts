@@ -32,6 +32,6 @@ export default class NoteCommand extends Command {
         reason,
       },
     });
-    return ctx.reply(`Sucessfully added a note to the specified user (${user}).`);
+    return ctx.reply(`Added a note to ${user} for \`${reason}\`.`);
   };
 }

@@ -9,6 +9,9 @@ import { guildConfigs } from "../../lib/structures/GuildConfigs.js";
   permissions: {
     staff: true,
   },
+  detailedDescription: {
+    usage: "<infractionId> <reason>"
+  },
   description: "Updates a punishment.",
 })
 export default class UpdatecaseCommand extends Command {

@@ -11,6 +11,9 @@ import { ApplyCommandOptions } from "../../lib/utils/functions.js";
   permissions: {
     staff: true,
   },
+  detailedDescription: {
+    usage: `<member> <duration> <reason>`,
+  },
   description: "Mutes someone for a provided reason and duration.",
 })
 export default class MuteCommand extends Command {

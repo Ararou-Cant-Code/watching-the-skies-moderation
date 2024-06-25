@@ -11,6 +11,9 @@ import { ApplyCommandOptions } from "../../lib/utils/functions.js";
   permissions: {
     staff: true,
   },
+  detailedDescription: {
+    usage: "<member> <reason>",
+  },
   description: "Warns someone for a provided reason.",
 })
 export default class WarnCommand extends Command {
