@@ -12,7 +12,7 @@ import { time, type EmbedField } from "discord.js";
     commands_channel: true,
   },
   detailedDescription: {
-    usage: "[member (Defaults to message.member)]",
+    usage: "[user (Defaults to message.author)]",
   },
   description: "Get all warnings on a user.",
 })
