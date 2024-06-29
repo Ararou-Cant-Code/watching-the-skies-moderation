@@ -20,14 +20,14 @@ export default class WarningsCommand extends Command {
   public override run = async (ctx: Context, args: Args) => {
     const infractionFields: EmbedField[] = [];
 
-    let member = await args.returnMemberFromIndex(0).catch(() => null);
+    let member = await args.returnUserFromIndex(0).catch(() => null);
 
     let page = await args.getNumberRest(member ? 1 : 0).catch(() => null);
     if (!page) page = 0;
     else page = page - 1;
 
-    if (!member) member = await ctx.member.fetch();
-    if (!this.checks.isStaff(ctx.member, guildConfigs.get(ctx.guild!.id)!)) member = await ctx.member.fetch();
+    if (!member) member = await ctx.author.fetch();
+    if (!this.checks.isStaff(ctx.member, guildConfigs.get(ctx.guild!.id)!)) member = await ctx.author.fetch();
 
     const infractions = await this.context.db.infractions.findMany({
       where: {
@@ -54,12 +54,12 @@ export default class WarningsCommand extends Command {
 
     const embed = pages[page]
       .setAuthor({
-        name: `${member.user.username} (${member.id})`,
+        name: `${member.username} (${member.id})`,
         iconURL: member.displayAvatarURL(),
       })
       .setColor(0xffb6c1)
       .setTitle(
-        `Found ${infractions.length} infraction${infractions.length === 1 ? "" : "s"} issued to ${member.user.username}.`,
+        `Found ${infractions.length} infraction${infractions.length === 1 ? "" : "s"} issued to ${member.username}.`,
       )
       .setFooter({ text: `Page ${page + 1} of ${pages.length}` });
     return ctx.reply({ embeds: [embed] });
