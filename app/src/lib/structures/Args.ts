@@ -78,6 +78,12 @@ export default class Args {
     return this.parser.flag(...keys);
   };
 
+  public getFlag = (key: string) => {
+    if (!this.command!.options.flags!) return false; // Command has no flags defined in options.
+
+    return this.parser.flag(key);
+  };
+
   public returnMemberFromIndex = async (index: number) => {
     if (!this.commandArgs.length) throw new ArgumentError("The raw array is likely empty.");
 

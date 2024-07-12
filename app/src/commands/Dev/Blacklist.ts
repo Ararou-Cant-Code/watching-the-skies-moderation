@@ -18,7 +18,7 @@ export default class BlacklistCommand extends Command {
 
     if (user.id === ctx.author.id) return ctx.reply("You cannot blacklist yourself.");
 
-    const reason = await args.getRest(2).catch(() => "No reason provided.");
+    const reason = await args.getRest(1).catch(() => "No reason provided.");
 
     const isBlacklisted = await this.context.client.db.blacklists.findFirst({
       where: {

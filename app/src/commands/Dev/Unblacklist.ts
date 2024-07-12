@@ -16,7 +16,7 @@ export default class UnblacklistCommand extends Command {
     const user = await args.returnMemberFromIndex(0).catch(() => null);
     if (!user) return ctx.reply("That is not a user.");
 
-    const reason = await args.getRest(2).catch(() => "No reason provided.");
+    const reason = await args.getRest(1).catch(() => "No reason provided.");
 
     const isBlacklisted = await this.context.client.db.blacklists.findFirst({
       where: {
