@@ -53,23 +53,23 @@ export abstract class Command {
 
     if (
       command.options.permissions &&
-      command.options.permissions.staff &&
+      command.options.permissions.staff && context.executed!.user.id !== context.client.developerId &&
       !this.checks.isStaff(ctx.member!, guildConfigs.get(ctx.message.guild!.id)!)
     )
       return "FAILED";
 
     if (
       command.options.permissions &&
-      command.options.permissions.hmod &&
-      !this.checks.isStaff(ctx.member!, guildConfigs.get(ctx.message.guild!.id)!)
+      command.options.permissions.hmod && context.executed!.user.id !== context.client.developerId &&
+      !this.checks.isHmod(ctx.member!, guildConfigs.get(ctx.message.guild!.id)!)
     )
       return "FAILED";
 
     if (
       command.options.permissions &&
-      command.options.permissions.trusted_member &&
-      !context.executed!.userRoles!.includes(guildConfig!.roles!.level_roles![20]) &&
-      !this.checks.isStaff(ctx.member!, guildConfigs.get(ctx.message.guild!.id)!)
+      command.options.permissions.admin &&
+      context.executed!.user.id !== context.client.developerId &&
+      !this.checks.isAdmin(ctx.member!, guildConfigs.get(ctx.message.guild!.id)!)
     )
       return "FAILED";
 
@@ -77,6 +77,7 @@ export abstract class Command {
       command.options.permissions &&
       command.options.permissions.commands_channel &&
       context.executed!.channel.id !== guildConfig!.channels!.commands &&
+      context.executed!.user.id !== context.client.developerId &&
       !this.checks.isStaff(ctx.member!, guildConfigs.get(ctx.message.guild!.id)!)
     )
       return ctx.reply("This command goes in a bot-commands channel, not here.");
