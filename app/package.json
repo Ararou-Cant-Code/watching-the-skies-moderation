@@ -38,7 +38,7 @@
     "@sapphire/eslint-config": "^5.0.4",
     "@sapphire/lexure": "^1.1.7",
     "@sapphire/time-utilities": "^1.7.12",
-    "@sentry/node": "^7.109.0",
+    "@sentry/node": "^8.0.0",
     "@sern/handler": "^3.0.3",
     "@typescript-eslint/eslint-plugin": "^7.8.0",
     "canvacord": "^6.0.0",
