@@ -33,7 +33,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "5.12.0",
+    "@prisma/client": "5.21.1",
     "@ptkdev/logger": "^1.8.0",
     "@sapphire/eslint-config": "^5.0.4",
     "@sapphire/lexure": "^1.1.7",
@@ -52,9 +52,9 @@
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@types/node-cron": "^3",
-    "prisma": "5.12.0",
-    "typescript": "5.4"
+    "prisma": "5.21.1",
+    "typescript": "5.6"
   },
   "type": "module",
-  "packageManager": "yarn@4.2.2"
+  "packageManager": "yarn@4.5.1"
 }
